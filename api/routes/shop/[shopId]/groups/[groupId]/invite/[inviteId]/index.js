@@ -1,6 +1,14 @@
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { LedgerItemType, LogType } from "@prisma/client";
+import { z } from "zod";
+
+const shopSchema = z.object({
+  //expires: z.string,
+  title: z.string().min(1, "Title is Required"),
+  description: z.string().optional(),
+  active: z.boolean().min(1, "Status required")
+});
 
 export const get = [
   async (req, res) => {
@@ -151,13 +159,23 @@ export const post = [
         },
       });
 
+      const validationResult = shopSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+      const validatedData = validationResult.data;
+
       if (userBillingGroup) {
         await prisma.userBillingGroup.update({
           where: {
             id: userBillingGroup.id,
           },
           data: {
-            active: true,
+            active: validatedData.active,
           },
         });
       } else {
@@ -223,16 +241,27 @@ export const put = [
       },
     });
 
+    const validationResult = shopSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+    const validatedData = validationResult.data;
+
     const invite = await prisma.billingGroupInvitationLink.update({
       where: {
         id: inviteId,
       },
       data: {
         expires: expires ? new Date(expires) : undefined,
-        title,
-        description,
-        active,
+        title: validatedData.title,
+        description: validatedData.description,
+        active: validatedData.active,
       },
+      //select: ??
     });
 
     await prisma.logs.create({

@@ -1,6 +1,14 @@
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { LogType } from "@prisma/client";
+import { z } from "zod"
+
+const shopSchema  = z.object({
+  //userID: 
+  //billingGroupId:
+
+});
+
 
 export const get = [
   verifyAuth,

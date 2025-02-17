@@ -2,6 +2,12 @@ import { LogType } from "@prisma/client";
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { utapi } from "../../../../../../../config/uploadthing.js";
+import { z } from "zod";
+
+const shopSchema = z.object({
+  
+
+});
 
 export const get = [
   verifyAuth,

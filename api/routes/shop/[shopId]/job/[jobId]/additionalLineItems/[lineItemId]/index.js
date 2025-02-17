@@ -1,5 +1,10 @@
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
+import { z } from "zod"
+
+const shopSchema = z.object({
+//
+});
 
 export const get = [
   verifyAuth,
@@ -163,6 +168,16 @@ export const put = [
       delete req.body.resourceType;
       delete req.body.resource;
       delete req.body.material;
+
+      const validationResult = shopSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+      const validatedData = validationResult.data;
 
       const updatedLineItem = await prisma.additionalCostLineItem.update({
         where: {
