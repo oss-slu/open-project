@@ -325,6 +325,17 @@ export const JobItem = ({
                           resourceTypeId={item.resourceTypeId}
                           opLoading={opLoading}
                           includeNone={true}
+                          materialType={"Primary"}
+                        />
+                        <MaterialPicker
+                          value={item.secondaryMaterialId}
+                          onChange={(value) =>
+                            updateJobItem({ secondaryMaterialId: value })
+                          }
+                          resourceTypeId={item.resourceTypeId}
+                          opLoading={opLoading}
+                          includeNone={true}
+                          materialType={"Secondary"}
                         />
                         {userIsPrivileged ? (
                           <ResourcePicker

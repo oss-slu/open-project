@@ -164,7 +164,8 @@ model Material {
   additionalCostItems AdditionalCostLineItem[]
   jobs                Job[]                    @relation("Job::primaryMaterial")
   jobsSecondary       Job[]                    @relation("Job::secondaryMaterial")
-  jobItems            JobItem[]
+  jobItems            JobItem[]                @relation("JobItem::primaryMaterial")
+  jobItemsSecondary   JobItem[]                @relation("JobItem::secondaryMaterial")
   resourceType        ResourceType             @relation(fields: [resourceTypeId], references: [id])
   shop                Shop                     @relation(fields: [shopId], references: [id])
   images              MaterialImage[]
@@ -228,6 +229,7 @@ model Job {
   shopId                 String
   userId                 String
   materialId             String?
+  materialQty            Float?
   resourceTypeId         String?
   resourceId             String?
   groupId                String?
@@ -238,6 +240,7 @@ model Job {
   additionalCostOverride Boolean                  @default(false)
   status                 ProgressStatus           @default(NOT_STARTED)
   secondaryMaterialId    String?
+  secondaryMaterialQty   Float?
   additionalCosts        AdditionalCostLineItem[]
   group                  BillingGroup?            @relation(fields: [groupId], references: [id])
   material               Material?                @relation("Job::primaryMaterial", fields: [materialId], references: [id])
@@ -301,41 +304,44 @@ model AdditionalCostLineItem {
 }
 
 model JobItem {
-  id                String         @id @default(cuid())
-  title             String
-  status            ProgressStatus @default(NOT_STARTED)
-  qty               Float?
-  fileKey           String
-  fileUrl           String
-  fileName          String
-  fileType          String
-  fileThumbnailKey  String?
-  fileThumbnailUrl  String?
-  fileThumbnailName String?
-  stlVolume         Float?
-  stlBoundingBoxX   Float?
-  stlBoundingBoxY   Float?
-  stlBoundingBoxZ   Float?
-  stlIsWatertight   Boolean?
-  resourceId        String?
-  resourceTypeId    String?
-  materialId        String?
-  userId            String?
-  approved          Boolean?
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  active            Boolean        @default(true)
-  processingTimeQty Float?
-  timeQty           Float?
-  unitQty           Float?
-  materialQty       Float?
-  jobId             String
-  job               Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  material          Material?      @relation(fields: [materialId], references: [id])
-  resource          Resource?      @relation(fields: [resourceId], references: [id])
-  resourceType      ResourceType?  @relation(fields: [resourceTypeId], references: [id])
-  user              user?          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  logs              logs[]
+  id                   String         @id @default(cuid())
+  title                String
+  status               ProgressStatus @default(NOT_STARTED)
+  qty                  Float?
+  fileKey              String
+  fileUrl              String
+  fileName             String
+  fileType             String
+  fileThumbnailKey     String?
+  fileThumbnailUrl     String?
+  fileThumbnailName    String?
+  stlVolume            Float?
+  stlBoundingBoxX      Float?
+  stlBoundingBoxY      Float?
+  stlBoundingBoxZ      Float?
+  stlIsWatertight      Boolean?
+  resourceId           String?
+  resourceTypeId       String?
+  materialId           String?
+  secondaryMaterialId  String?
+  userId               String?
+  approved             Boolean?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  active               Boolean        @default(true)
+  processingTimeQty    Float?
+  timeQty              Float?
+  unitQty              Float?
+  materialQty          Float?
+  secondaryMaterialQty Float?
+  jobId                String
+  job                  Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  material             Material?      @relation("JobItem::primaryMaterial", fields: [materialId], references: [id])
+  secondaryMaterial    Material?      @relation("JobItem::secondaryMaterial", fields: [secondaryMaterialId], references: [id])
+  resource             Resource?      @relation(fields: [resourceId], references: [id])
+  resourceType         ResourceType?  @relation(fields: [resourceTypeId], references: [id])
+  user                 user?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs                 logs[]
 }
 
 model BillingGroup {
@@ -491,9 +497,9 @@ enum UserBillingGroupRole {
 }
 
 model Navigation {
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
   userId String
-  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   url String
 

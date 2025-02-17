@@ -10,6 +10,7 @@ export const MaterialPicker = ({
   resourceTypeId,
   opLoading,
   includeNone,
+  materialType
 }) => {
   const { shopId } = useParams();
   const { materials, loading } = useMaterials(shopId, resourceTypeId);
@@ -34,7 +35,7 @@ export const MaterialPicker = ({
             : null,
         ].filter((v) => v)}
         prompt="Select Material"
-        label={"Material"}
+        label={`${materialType} Material`}
       />
     </Util.Col>
   );
