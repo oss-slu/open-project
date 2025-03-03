@@ -33,6 +33,8 @@ const AddBalanceModalContent = ({ postLedgerItem, opLoading }) => {
             { label: "Deposit", id: "MANUAL_DEPOSIT" },
             { label: "User Purchased", id: "FUNDS_PURCHASED" },
             { label: "Reduction", id: "MANUAL_REDUCTION" },
+            { label: "Automated Topup", id: "AUTOMATED_TOPUP" },
+            { label: "Automated Deposit", id: "AUTOMATED_DEPOSIT" },
           ]}
           value={type}
           onChange={(v) => setType(v.id)}
@@ -55,7 +57,7 @@ const AddBalanceModalContent = ({ postLedgerItem, opLoading }) => {
       <Button
         loading={opLoading}
         onClick={async () => {
-          await postLedgerItem({ type, value });
+          await postLedgerItem({ type, value, isAutomated: type.startsWith("AUTOMATED")});
           document.location.reload();
         }}
       >
