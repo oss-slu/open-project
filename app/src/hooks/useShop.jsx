@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useShop = (shopId, options) => {
   const includeUsers = options?.includeUsers || false;
@@ -46,6 +47,7 @@ export const useShop = (shopId, options) => {
         setShop(updatedShop.shop);
         setOpLoading(false);
       } else {
+        toast.error(updatedShop);
         setError(updatedShop);
         setOpLoading(false);
       }

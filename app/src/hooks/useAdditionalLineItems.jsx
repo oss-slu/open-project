@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useAdditionalLineItems = (shopId, jobId) => {
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,7 @@ export const useAdditionalLineItems = (shopId, jobId) => {
         setLineItems(newLineItem.lineItems);
         setOpLoading(false);
       } else {
+        toast.error(newLineItem);
         setError(newLineItem);
         setOpLoading(false);
       }

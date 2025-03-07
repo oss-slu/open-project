@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
 import { useConfirm } from "tabler-react-2/dist/modal/confirm";
+import toast from "react-hot-toast";
 
 export const useAdditionalLineItem = (
   shopId,
@@ -62,6 +63,7 @@ export const useAdditionalLineItem = (
         setOpLoading(false);
         return true;
       } else {
+        toast.error(updatedlineItem);
         setError(updatedlineItem);
         setOpLoading(false);
         fetchLineItem(false);
@@ -90,6 +92,7 @@ export const useAdditionalLineItem = (
         setLineItem(null);
         setOpLoading(false);
       } else {
+        toast.error(data);
         setError(data);
         setOpLoading(false);
       }

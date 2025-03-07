@@ -3,6 +3,7 @@ import { authFetch } from "../util/url";
 import { useModal } from "tabler-react-2/dist/modal";
 import { Input, Button, Util } from "tabler-react-2";
 import { ResourceTypePicker } from "../components/resourceTypePicker/ResourceTypePicker";
+import toast from "react-hot-toast";
 
 const CreateMaterialModalContent = ({ onSubmit, resourceTypeId }) => {
   const [title, setTitle] = useState("");
@@ -107,6 +108,7 @@ export const useMaterials = (shopId, resourceTypeId) => {
         setOpLoading(false);
         document.location.href = `/shops/${shopId}/resources/type/${resourceTypeId}/materials/${result.material.id}`;
       } else {
+        toast.error(result.error || "An error occurred");
         setError(result.error || "An error occurred");
         setOpLoading(false);
       }
@@ -137,6 +139,7 @@ export const useMaterials = (shopId, resourceTypeId) => {
         setMaterials(data.materials);
         setLoading(false);
       } else {
+        toast.error(data.error || "Failed to fetch materials");
         setError(data.error || "Failed to fetch materials");
         setLoading(false);
       }

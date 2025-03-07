@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useMaterial = (shopId, resourceTypeId, materialId) => {
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,7 @@ export const useMaterial = (shopId, resourceTypeId, materialId) => {
         setMaterial(updatedMaterial.material);
         setOpLoading(false);
       } else {
+        toast.error(updatedMaterial);
         setError(updatedMaterial);
         setOpLoading(false);
       }

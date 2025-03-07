@@ -102,7 +102,7 @@ export const put = [
       delete data.shopId;
       delete data.createdAt;
       delete data.updatedAt;
-
+                
       if (data.quantity) data.quantity = parseInt(data.quantity);
       if (data.costPerUnit) data.costPerUnit = parseFloat(data.costPerUnit);
       if (data.fixedCost) data.fixedCost = parseFloat(data.fixedCost);

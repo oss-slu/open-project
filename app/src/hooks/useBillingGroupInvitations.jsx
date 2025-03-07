@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useBillingGroupInvitations = (shopId, billingGroupId) => {
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,7 @@ export const useBillingGroupInvitations = (shopId, billingGroupId) => {
         setbillingGroupInvitations(updatedbillingGroupInvitations.invites);
         setOpLoading(false);
       } else {
+        toast.error(updatedbillingGroupInvitations);
         setError(updatedbillingGroupInvitations);
         setOpLoading(false);
       }

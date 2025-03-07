@@ -1,6 +1,12 @@
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { LogType } from "@prisma/client";
+import { z } from "zod";
+
+const resourceSchema = z.object({
+  title: z.string().min(1, "Resouce must have title"),
+  shopId: z.string().min(1, "Shop must have ID")
+});
 
 export const get = [
   verifyAuth,
@@ -75,12 +81,20 @@ export const post = [
       });
     }
 
-    const { title } = req.body;
+    const validationResult = resourceSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+    const validatedData = validationResult.data;
 
     const resourceType = await prisma.resourceType.create({
       data: {
-        title,
-        shopId,
+        title: validatedData.title,
+        shopId: validatedData.shopId,
       },
     });
 

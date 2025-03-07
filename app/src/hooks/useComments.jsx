@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useComments = (shopId, jobId) => {
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ export const useComments = (shopId, jobId) => {
         setComments(updatedComments.comments);
         setOpLoading(false);
       } else {
+        toast.error(updatedComments);
         setError(updatedComments);
         setOpLoading(false);
       }

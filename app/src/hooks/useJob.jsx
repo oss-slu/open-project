@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
 import { useConfirm } from "tabler-react-2";
+import toast from "react-hot-toast";
 
 export const useJob = (shopId, jobId) => {
   const [loading, setLoading] = useState(true);
@@ -57,6 +58,7 @@ export const useJob = (shopId, jobId) => {
           setJob(data.job);
           setOpLoading(false);
         } else {
+          toast.error("Internal server error");
           setError("Internal server error");
           setOpLoading(false);
         }

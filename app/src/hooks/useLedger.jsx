@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useLedger = (shopId, userId) => {
   const [loading, setLoading] = useState(true);
@@ -44,6 +45,7 @@ export const useLedger = (shopId, userId) => {
         setOpLoading(false);
         return true;
       } else {
+        toast.error(data);
         setError(data);
         setOpLoading(false);
         return false;

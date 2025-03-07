@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useBillingGroups = (shopId) => {
   const [loading, setLoading] = useState(true);
@@ -38,6 +39,7 @@ export const useBillingGroups = (shopId) => {
         setBillingGroups(updatedBillingGroups.groups);
         setOpLoading(false);
       } else {
+        toast.error(updatedBillingGroups);
         setError(updatedBillingGroups);
         setOpLoading(false);
       }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 // Module-level variables for caching
 let cachedPrinterTypes = null;
@@ -73,6 +74,7 @@ export const use3dPrinterTypes = (shopId) => {
         setPrinterTypes(data.types);
         setOpLoading(false);
       } else {
+        toast.error(data.error);
         setError(data.error);
         setOpLoading(false);
       }
@@ -104,6 +106,7 @@ export const use3dPrinterTypes = (shopId) => {
         setPrinterTypes(data.types);
         setOpLoading(false);
       } else {
+        toast.error(data.error);
         setError(data.error);
         setOpLoading(false);
       }

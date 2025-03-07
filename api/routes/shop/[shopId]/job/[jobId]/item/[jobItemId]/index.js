@@ -2,6 +2,15 @@ import { LogType } from "@prisma/client";
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { utapi } from "../../../../../../../config/uploadthing.js";
+import { z } from "zod";
+
+const jobSchema = z.object({
+  costingPublic: z.boolean().optional(),
+  costPerProcessingTime: z.number().optional(),
+  costPerTime: z.number().optional(),
+  costPerUnit: z.number().optional(),
+  unitDescriptor: z.string().optional(),
+});
 
 export const get = [
   verifyAuth,
@@ -120,6 +129,16 @@ export const put = [
 
     console.log(req.body.data);
 
+    const validationResult = jobSchema.safeParse(req.body);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid data",
+        issues: validationResult.error.format(),
+      });
+    }
+
+    const validatedData = validationResult.data;
+
     const updatedItem = await prisma.jobItem.update({
       where: {
         id: jobItemId,
@@ -129,16 +148,16 @@ export const put = [
       include: {
         resource: {
           select: {
-            costingPublic: true,
-            costPerProcessingTime: true,
-            costPerTime: true,
-            costPerUnit: true,
+            costingPublic: validatedData.costingPublic,
+            costPerProcessingTime: validatedData.costingPerProcessingTime,
+            costPerTime: validatedData.costPerTime,
+            costPerUnit: validatedData.costPerUnit,
           },
         },
         material: {
           select: {
-            costPerUnit: true,
-            unitDescriptor: true,
+            costPerUnit: validatedData.costPerUnit,
+            unitDescriptor: validatedData.unitDescriptor,
           },
         },
         secondaryMaterial: {

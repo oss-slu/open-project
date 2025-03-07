@@ -3,6 +3,7 @@ import { authFetch } from "../util/url";
 import { Input, Button, Util } from "tabler-react-2";
 import { useModal } from "tabler-react-2/dist/modal";
 import { ResourceTypePicker } from "../components/resourceTypePicker/ResourceTypePicker";
+import toast from "react-hot-toast";
 
 const CreateResourceModalContent = ({ onSubmit, _resourceTypeId }) => {
   const [title, setTitle] = useState("");
@@ -57,6 +58,7 @@ export const useResources = (shopId, resourceTypeId) => {
         setOpLoading(false);
         document.location.href = `/shops/${shopId}/resources/${data.resource.id}`;
       } else {
+        toast.error(data.error);
         setError(data.error);
         setOpLoading(false);
       }

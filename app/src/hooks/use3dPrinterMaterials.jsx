@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const use3dPrinterMaterials = (shopId, typeId) => {
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ export const use3dPrinterMaterials = (shopId, typeId) => {
         setOpLoading(false);
         return true;
       } else {
+        toast.error(data.error);
         setError(data.error);
         setOpLoading(false);
         return false;
@@ -80,6 +82,7 @@ export const use3dPrinterMaterials = (shopId, typeId) => {
         setPrinterMaterials(data.materials);
         setOpLoading(false);
       } else {
+        toast.error(data.error);
         setError(data.error);
         setOpLoading(false);
       }

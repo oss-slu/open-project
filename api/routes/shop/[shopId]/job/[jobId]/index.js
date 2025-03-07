@@ -3,6 +3,11 @@ import { LedgerItemType, LogType, Prisma } from "@prisma/client";
 import { prisma } from "../../../../../util/prisma.js";
 import { verifyAuth } from "../../../../../util/verifyAuth.js";
 import { generateInvoice } from "../../../../../util/docgen/invoice.js";
+import { z } from "zod";
+
+const userSchema = z.object({
+  ledgerItemId: z.string().optional
+});
 
 /** @type {Prisma.JobInclude} */
 const JOB_INCLUDE = {
@@ -306,13 +311,23 @@ export const put = [
           },
         });
 
+        const validationResult = userSchema.safeParse(req.body);
+          if (!validationResult.success) {
+            return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+          });
+        }
+
+        const validatedData = validationResult.data;
+
         await prisma.logs.update({
           where: {
             id: log.id,
           },
           data: {
-            ledgerItemId: ledgerItem.id,
-          },
+            ledgerItemId: validatedData.ledgerItem,
+          }
         });
 
         await prisma.logs.createMany({

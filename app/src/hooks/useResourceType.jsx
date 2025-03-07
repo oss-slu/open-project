@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 const fetcher = (url) => authFetch(url).then((res) => res.json());
 
@@ -44,6 +45,7 @@ export const useResourceType = (shopId, resourceTypeId) => {
         setResources(updatedDataResponse.resources);
         mutate(); // Re-fetch data after the update
       } else {
+        toast.error(updatedDataResponse);
         setError(updatedDataResponse);
       }
     } catch (err) {

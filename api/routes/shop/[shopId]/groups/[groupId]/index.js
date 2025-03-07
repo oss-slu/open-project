@@ -1,6 +1,13 @@
 import { prisma } from "#prisma";
 import { verifyAuth, verifyAuthAlone } from "#verifyAuth";
 import { LogType } from "@prisma/client";
+import { z } from "zod";
+
+const billingGroupSchema = z.object({
+  title: z.string().min(1, "Title is Required"),
+  description: z.string().optional(),
+  membersCanCreateJobs: z.boolean().optional()
+});
 
 export const put = [
   verifyAuth,
@@ -41,15 +48,25 @@ export const put = [
         },
       });
 
+      const validationResult = billingGroupSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+      const validatedData = validationResult.data;
+
       const group = await prisma.billingGroup.update({
         where: {
           id: groupId,
         },
         data: {
-          title: req.body.title,
-          description: req.body.description,
-          membersCanCreateJobs: req.body.membersCanCreateJobs,
-        },
+          title: validatedData.title,
+          description: validatedData.description,
+          membersCanCreateJobs: validatedData.membersCanCreateJobs,
+        }
       });
 
       await prisma.logs.create({

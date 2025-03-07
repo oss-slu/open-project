@@ -1,6 +1,12 @@
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { generateInvoice } from "../../../../../../util/docgen/invoice.js";
+import { z } from "zod"
+
+const jobSchema = z.object({
+  finalized: z.boolean(),
+  finalizedAt: z.string().datetime(),
+});
 
 export const post = [
   verifyAuth,
@@ -62,14 +68,24 @@ export const post = [
 
     const { url, key, value } = await generateInvoice(job);
 
+    const validationResult = jobSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+    const validatedData = validationResult.data;
+
     await prisma.job.update({
       where: {
         id: jobId,
       },
       data: {
-        finalized: true,
-        finalizedAt: new Date(),
-      },
+        finalized: validatedData.finalized,
+        finalizedAt: validatedData.finalizedAt,
+      }
     });
 
     await prisma.ledgerItem.create({

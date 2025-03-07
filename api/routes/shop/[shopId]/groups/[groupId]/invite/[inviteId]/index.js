@@ -1,6 +1,14 @@
 import { prisma } from "#prisma";
 import { verifyAuth } from "#verifyAuth";
 import { LedgerItemType, LogType } from "@prisma/client";
+import { z } from "zod";
+
+const billingGroupSchema = z.object({
+  //expires: z.date().safeParse(new Date()).optional(),
+  title: z.string().min(1, "Title is Required"),
+  description: z.string().optional(),
+  active: z.boolean()
+});
 
 export const get = [
   async (req, res) => {
@@ -151,13 +159,23 @@ export const post = [
         },
       });
 
+      const validationResult = billingGroupSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+      const validatedData = validationResult.data;
+
       if (userBillingGroup) {
         await prisma.userBillingGroup.update({
           where: {
             id: userBillingGroup.id,
           },
           data: {
-            active: true,
+            active: validatedData.active,
           },
         });
       } else {
@@ -215,24 +233,32 @@ export const put = [
       return res.status(400).send({ error: "Forbidden" });
     }
 
-    const { expires, title, description, active } = req.body;
-
     const originalInvite = await prisma.billingGroupInvitationLink.findFirst({
       where: {
         id: inviteId,
       },
     });
 
+    const validationResult = billingGroupSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: "Invalid data",
+          issues: validationResult.error.format(),
+        });
+      }
+
+    const validatedData = validationResult.data;
+
     const invite = await prisma.billingGroupInvitationLink.update({
       where: {
         id: inviteId,
       },
       data: {
-        expires: expires ? new Date(expires) : undefined,
-        title,
-        description,
-        active,
-      },
+        expires: validatedData.expires,
+        title: validatedData.title,
+        description: validatedData.description,
+        active: validatedData.active,
+      }
     });
 
     await prisma.logs.create({

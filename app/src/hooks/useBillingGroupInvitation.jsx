@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const useBillingGroupInvitation = (
   shopId,
@@ -49,6 +50,7 @@ export const useBillingGroupInvitation = (
         setBillingGroupInvitation(updatedBillingGroupInvitation.invite);
         setOpLoading(false);
       } else {
+        toast.error(updatedBillingGroupInvitation);
         setError(updatedBillingGroupInvitation);
         setOpLoading(false);
       }
@@ -75,6 +77,7 @@ export const useBillingGroupInvitation = (
         navigate(`/shops/${shopId}/groups/${groupId}/portal`);
         setOpLoading(false);
       } else {
+        toast.error(updatedBillingGroupInvitation);
         setError(updatedBillingGroupInvitation);
         setOpLoading(false);
       }

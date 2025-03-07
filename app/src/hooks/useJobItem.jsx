@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const useJobItem = (shopId, jobId, jobItemId, options) => {
   const initialValue = options?.initialValue;
@@ -56,6 +57,7 @@ export const useJobItem = (shopId, jobId, jobItemId, options) => {
         setItem(newData.item);
         setOpLoading(false);
       } else {
+        toast.error("Internal server error");
         setError("Internal server error");
         setOpLoading(false);
       }
@@ -89,6 +91,7 @@ export const useJobItem = (shopId, jobId, jobItemId, options) => {
         setOpLoading(false);
         refetchJobs && refetchJobs(false);
       } else {
+        toast.error("Internal server error");
         setError("Internal server error");
         setOpLoading(false);
       }

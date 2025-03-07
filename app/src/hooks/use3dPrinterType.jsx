@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authFetch } from "../util/url";
+import toast from "react-hot-toast";
 
 export const use3dPrinterType = (shopId, typeId) => {
   console.error("use3dPrinterType deprecated");
@@ -44,6 +45,7 @@ export const use3dPrinterType = (shopId, typeId) => {
         setPrinterType(data.type);
         setOpLoading(false);
       } else {
+        toast.error(data.error);
         setError(data.error);
         setOpLoading(false);
       }
