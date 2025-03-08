@@ -1258,6 +1258,15 @@ axios@^1.6.2:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
+axios@^1.7.4:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.1.tgz#7c118d2146e9ebac512b7d1128771cdd738d11e3"
+  integrity sha512-NN+fvwH/kV01dYUQ3PTOZns4LWtWhOFCAhQ/pHb88WQ1hNe5V/dvFwc4VJcDL11LT9xSX0QtsR8sWUuyOuOq7g==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 b4a@^1.6.4:
   version "1.6.7"
   resolved "https://registry.yarnpkg.com/b4a/-/b4a-1.6.7.tgz#a99587d4ebbfbd5a6e3b21bdb5d5fa385767abe4"
@@ -4054,6 +4063,13 @@ postcss@^8.4.43:
     nanoid "^3.3.7"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
+
+postmark@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/postmark/-/postmark-4.0.5.tgz#515ae85562fcedbec6ae7eb0ef180dded1dbc05d"
+  integrity sha512-nerZdd3TwOH4CgGboZnlUM/q7oZk0EqpZgJL+Y3Nup8kHeaukxouQ6JcFF3EJEijc4QbuNv1TefGhboAKtf/SQ==
+  dependencies:
+    axios "^1.7.4"
 
 prelude-ls@^1.2.1:
   version "1.2.1"

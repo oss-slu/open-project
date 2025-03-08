@@ -2,6 +2,7 @@ import { LogType } from "@prisma/client";
 import { prisma } from "../../../../util/prisma.js";
 import { verifyAuth } from "../../../../util/verifyAuth.js";
 import { calculateTotalCostOfJob } from "../../../../util/docgen/invoice.js";
+// import client from "#postmark";
 
 export const post = [
   verifyAuth,
@@ -156,6 +157,52 @@ export const post = [
           }),
         },
       });
+
+      console.log("Email Sent! - mock");
+
+      /* - When you uncomment this don't forget to remove the comment for importing postmark!!!
+
+      const { name: shopName } = await prisma.shop.findFirst({
+        where: {
+          id: shopId,
+        }
+      });
+      
+      const adminsOperators = await prisma.userShop.findMany({
+        where: {
+          shopId: shopId,
+          accountType: {
+            in: ['ADMIN', 'OPERATOR'], 
+          },
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      let emails = [];
+      adminsOperators.forEach((userShop) => {
+        userShop.user.email && emails.push(userShop.user.email);
+      });
+
+      if (!emails.includes(req.user.email)) {
+        emails.push(req.user.email);
+      }
+      
+      client.sendEmail({
+        "From": `${process.env.POSTMARK_FROM_EMAIL}`, 
+        "To": `${emails.join(',')}`,
+        "Subject": `A Job was Created on Your Shop`,
+        "HtmlBody": `The job ${title} was created on the ${shopName} shop.` , 
+        "TextBody": `The job ${title} was created on the ${shopName} shop.`,
+        "MessageStream": "outbound"
+      });
+
+      */
 
       if (billingGroupToCreateJobAs) {
         await prisma.logs.create({

@@ -34,6 +34,7 @@
     "passport": "^0.7.0",
     "passport-saml": "^3.2.4",
     "path": "^0.12.7",
+    "postmark": "^4.0.5",
     "prisma-docs-generator": "^0.8.0",
     "puppeteer": "^23.6.1",
     "uploadthing": "^7.2.0",
@@ -53,6 +54,7 @@
   },
   "imports": {
     "#prisma": "./util/prisma.js",
+    "#postmark": "./util/postmark.js",
     "#verifyAuth": "./util/verifyAuth.js",
     "#mock-prisma": "./util/__mocks__/prisma.js",
     "#gt": "./util/tests/generateToken.js",
