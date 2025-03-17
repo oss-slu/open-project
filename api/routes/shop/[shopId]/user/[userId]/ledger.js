@@ -152,6 +152,10 @@ export const post = [
       case "MANUAL_REDUCTION":
         valueToPost = parseFloat(value) * -1;
         break;
+      //automated deposits will be handled like a manual deposit, for now.
+      case "AUTOMATED_DEPOSIT":
+        valueToPost = parseFloat(value);
+        break;
       default:
         console.error("Invalid type", type);
         return res.status(400).json({ error: "Invalid type" });
