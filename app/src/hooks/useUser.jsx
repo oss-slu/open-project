@@ -37,6 +37,25 @@ export const useUser = (userId) => {
     }
   };
 
+  const updateUserName = async (firstName, lastName, shouldSetLoading = true) => {
+    try {
+      shouldSetLoading && setLoading(true);
+      await authFetch(`/api/users/${userId}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          userId,
+          firstName,
+          lastName,
+        }),
+      });
+      console.log("User name updated.");
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const promoteUserToGlobalAdmin = async () => {
     setOpLoading(true);
     try {
@@ -120,6 +139,7 @@ export const useUser = (userId) => {
     loading,
     error,
     refetch: fetchUser,
+    updateUserName,
     promoteUserToGlobalAdmin,
     opLoading,
     SuspendConfirmModal,

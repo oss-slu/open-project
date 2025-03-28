@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import { Loading } from "../../components/loading/Loading";
@@ -10,6 +10,7 @@ import { LogTimeline } from "../../components/logs/timeline";
 import { Table } from "tabler-react-2/dist/table";
 import moment from "moment";
 import { Button } from "tabler-react-2/dist/button";
+import { Input } from "tabler-react-2";
 import { Icon } from "../../util/Icon";
 import Badge from "tabler-react-2/dist/badge";
 import { useModal } from "tabler-react-2/dist/modal";
@@ -19,7 +20,7 @@ import { Alert } from "tabler-react-2/dist/alert";
 import { useConfirm } from "tabler-react-2/dist/modal/confirm";
 import { NotFound } from "../../components/404/404";
 import { useUserLogs } from "../../hooks/useUserLogs";
-const { H1, H2, H3 } = Typography;
+const { H2, H3 } = Typography;
 
 const AddUserToShopForm = ({ user, onFinish }) => {
   const [selectedShop, setSelectedShop] = useState(null);
@@ -131,6 +132,7 @@ export const UserPage = () => {
     user,
     loading,
     refetch,
+    updateUserName,
     SuspendConfirmModal,
     UnSuspendConfirmModal,
     suspendUser,
@@ -164,6 +166,35 @@ export const UserPage = () => {
       ),
   });
 
+  const [editableFirstName, setEditableFirstName] = useState("");
+  const [editableLastName, setEditableLastName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setEditableFirstName(user.firstName);
+      setEditableLastName(user.lastName);
+    }
+  }, [user]);
+
+  const handleSaveName = async () => {
+    if (editableFirstName !== user.firstName || editableLastName !== user.lastName) {
+      try {
+        await updateUserName(editableFirstName, editableLastName);
+        await refetch(true);
+      } catch (error) {
+        console.error("Error Saving Name:", error);
+      }
+    }
+    setIsEditing(false);
+  };
+
+  const handleDiscardName = () => {
+    setEditableFirstName(user.firstName);
+    setEditableLastName(user.lastName);
+    setIsEditing(false);
+  };
+
   if (loading) return <Loading />;
   if (!user?.id) return <NotFound />;
 
@@ -175,9 +206,14 @@ export const UserPage = () => {
       <Util.Row gap={2} align="center">
         <Avatar size="xl" dicebear initials={user.id} />
         <Util.Col>
-          <H1>
-            {user.firstName} {user.lastName}
-          </H1>
+          <Input value={editableFirstName} onChange={(e) => { setEditableFirstName(e); if (!isEditing) setIsEditing(true); }}></Input>
+          <Input value={editableLastName} onChange={(e) => { setEditableLastName(e); if (!isEditing) setIsEditing(true); }}></Input>
+          {isEditing && (
+            <div>
+              <Button onClick={handleSaveName}>Save</Button>
+              <Button onClick={handleDiscardName}>Discard</Button>
+            </div>
+          )}
           <span>
             <Link to={`mailto:${user.email}`}>{user.email}</Link>
           </span>

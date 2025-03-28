@@ -168,3 +168,31 @@ export const get = [
     }
   },
 ];
+
+export const put = [
+  verifyAuth,
+  async (req, res) => {
+    try {
+      const {userId, firstName, lastName} = req.body;
+
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          firstName: firstName,
+          lastName: lastName,
+        },
+      });
+
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json({ user: updatedUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error with updating user's name in prisma." });
+    }
+  },
+];
