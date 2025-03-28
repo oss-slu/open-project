@@ -64,7 +64,22 @@ export const post = [
   verifyAuth,
   async (req, res) => {
     const { shopId, userId } = req.params;
-    const { type, value: startValue } = req.body;
+    const { type,
+           automatedLedgerPostItemValue, 
+           automatedLedgerPostItemType,
+           startValue
+          } = req.body;
+
+    // Validate input for manual and automated
+    if (type === 'AUTOMATED_TOPUP' || type === 'AUTOMATED_DEPOSIT') {
+      if (typeof automatedLedgerPostItemValue !== 'number' || automatedLedgerPostItemValue < 0) {
+        return res.status(400).json({ error: "Invalid deposit value. Must be a number greater than or equal to zero." });
+      }
+
+      if (!['TOPUP', 'DEPOSIT'].includes(automatedLedgerPostItemType)) {
+        return res.status(400).json({ error: "Invalid automatedLedgerPostItemType. Must be 'TOPUP' or 'DEPOSIT'." });
+      }
+    }
 
     const userShop = await prisma.userShop.findFirst({
       where: {

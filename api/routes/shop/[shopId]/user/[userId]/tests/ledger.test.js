@@ -255,12 +255,38 @@ describe("/shop/[shopId]/user/[userId]/ledger", () => {
       expect(res.body).toEqual({ error: "Invalid value" });
     });
 
+    it("throws an error if the value is negative", async () => {
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.globalUser.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_TOPUP",
+          value: -100,
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toEqual({ error: "Invalid value" });
+    });
+
     it("throws an error if the value is not a number", async () => {
       const res = await request(app)
         .post(`/api/shop/${tc.shop.id}/user/${tc.globalUser.id}/ledger`)
         .set(...(await gt({ ga: true })))
         .send({
           type: "MANUAL_TOPUP",
+          value: "adf",
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toEqual({ error: "value must be floaty" });
+    });
+
+    it("throws an error if the value is not a number", async () => {
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.globalUser.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_TOPUP",
           value: "adf",
         });
 
@@ -281,12 +307,39 @@ describe("/shop/[shopId]/user/[userId]/ledger", () => {
       expect(res.body.balance).toBe(100);
     });
 
+    it("converts floaty values to floats", async () => {
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.globalUser.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_TOPUP",
+          value: "100",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.balance).toBe(100);
+    });
+
     it("handles a manual topup", async () => {
       const res = await request(app)
         .post(`/api/shop/${tc.shop.id}/user/${tc.globalUser.id}/ledger`)
         .set(...(await gt({ ga: true })))
         .send({
           type: "MANUAL_TOPUP",
+          value: 100,
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.ledgerItems).toHaveLength(1);
+      expect(res.body.balance).toBe(100);
+    });
+
+    it("handles an Automated topup", async () => {
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.globalUser.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_TOPUP",
           value: 100,
         });
 
@@ -316,6 +369,27 @@ describe("/shop/[shopId]/user/[userId]/ledger", () => {
       expect(res.status).toBe(400);
     });
 
+    it("returns 400 if the automated topup value is less than the balance", async () => {
+      await prisma.ledgerItem.create({
+        data: {
+          userId: tc.user.id,
+          shopId: tc.shop.id,
+          type: LedgerItemType.INITIAL,
+          value: 100,
+        },
+      });
+
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.user.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_TOPUP",
+          value: 50,
+        });
+
+      expect(res.status).toBe(400);
+    });
+
     it("returns 400 if the topup value is the same as the balance", async () => {
       await prisma.ledgerItem.create({
         data: {
@@ -337,6 +411,27 @@ describe("/shop/[shopId]/user/[userId]/ledger", () => {
       expect(res.status).toBe(400);
     });
 
+    it("returns 400 if the automated topup value is the same as the balance", async () => {
+      await prisma.ledgerItem.create({
+        data: {
+          userId: tc.user.id,
+          shopId: tc.shop.id,
+          type: LedgerItemType.INITIAL,
+          value: 100,
+        },
+      });
+
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.user.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_TOPUP",
+          value: 100,
+        });
+
+      expect(res.status).toBe(400);
+    });
+
     it("handles a manual deposit", async () => {
       await prisma.ledgerItem.create({
         data: {
@@ -352,6 +447,28 @@ describe("/shop/[shopId]/user/[userId]/ledger", () => {
         .set(...(await gt({ ga: true })))
         .send({
           type: "MANUAL_DEPOSIT",
+          value: 100,
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.balance).toBe(200);
+    });
+
+    it("handles an automated deposit", async () => {
+      await prisma.ledgerItem.create({
+        data: {
+          userId: tc.user.id,
+          shopId: tc.shop.id,
+          type: LedgerItemType.INITIAL,
+          value: 100,
+        },
+      });
+
+      const res = await request(app)
+        .post(`/api/shop/${tc.shop.id}/user/${tc.user.id}/ledger`)
+        .set(...(await gt({ ga: true })))
+        .send({
+          type: "AUTOMATED_DEPOSIT",
           value: 100,
         });
 
