@@ -1,5 +1,5 @@
-import { prisma } from "../../../util/prisma.js";
-import { verifyAuth } from "../../../util/verifyAuth.js";
+import { prisma } from "#prisma";
+import { verifyAuth } from "#verifyAuth";
 
 export const get = [
   verifyAuth,

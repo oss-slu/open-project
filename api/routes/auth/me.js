@@ -1,4 +1,4 @@
-import { verifyAuth } from "../../util/verifyAuth.js";
+import { verifyAuth } from "#verifyAuth";
 
 export const get = [
   verifyAuth,

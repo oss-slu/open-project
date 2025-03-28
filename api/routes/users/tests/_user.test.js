@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import request from "supertest";
-import { app } from "../../../index.js";
+import { app } from "#index";
 import { gt } from "#gt";
 import { prisma } from "#mock-prisma";
 import { prisma as realPrisma } from "#prisma";
