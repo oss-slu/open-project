@@ -108,6 +108,8 @@ model Shop {
   resourceTypes   ResourceType[]
   users           UserShop[]
   logs            logs[]
+  automatedLedgerItemType LedgerItemType?
+  automatedLedgerItemValue Float?
 }
 
 model Resource {
@@ -499,6 +501,11 @@ enum ProgressStatus {
 enum UserBillingGroupRole {
   ADMIN
   MEMBER
+}
+
+enum automatedPostLedgerItemType{
+  TOPUP
+  DEPOSIT
 }
 
 model Navigation {
