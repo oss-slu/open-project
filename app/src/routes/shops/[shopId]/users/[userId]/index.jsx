@@ -43,7 +43,7 @@ const AddBalanceModalContent = ({ postLedgerItem, opLoading }) => {
         type="number"
         label="Amount"
         value={value}
-        onChange={(e) => setValue(e)}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="Select a topup amount"
         prependedText="$"
       />
@@ -52,6 +52,18 @@ const AddBalanceModalContent = ({ postLedgerItem, opLoading }) => {
         lower than the specified amount. A deposit will add the fixed specified
         amount to the user's balance.
       </i>
+
+      {type && type.startsWith("AUTOMATED") && (
+        <div>
+          <p><i>Automated top-ups and deposits will be processed on a regular schedule.</i></p>
+          <p>
+            {type === "AUTOMATED_TOPUP" ? 
+              "The automated top-up will be applied to bring the user's balance to the specified amount." : 
+              "The automated deposit will add a fixed amount to the user's balance periodically."}
+          </p>
+        </div>
+      )}
+
       <Button
         loading={opLoading}
         onClick={async () => {
