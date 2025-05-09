@@ -85,7 +85,6 @@ export const post = [
         active: true,
       },
     });
-
     if (
       !(
         req.user.admin ||
@@ -93,25 +92,28 @@ export const post = [
         reqUserShop.accountType === "OPERATOR"
       )
     ) {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
-
-    let value = null;
-    if (startValue) {
-      value = parseFloat(startValue);
-      if (isNaN(value)) {
-        return res.status(400).json({
-          error: "value must be floaty",
-        });
+        return res.status(403).json({ error: "Unauthorized" });
       }
+    
+    if (
+      !req.user.admin &&
+      (!reqUserShop ||
+        (reqUserShop.accountType !== "ADMIN" &&
+        reqUserShop.accountType !== "OPERATOR"))
+     ) {
+        return res.status(403).json({ error: "Unauthorized" });
     }
 
-    if (value < 0) {
+    if (typeof startValue === "undefined") {
+      return res.status(400).json({ error: "Missing value" });
+    }
+    const value = parseFloat(startValue);
+    if (isNaN(value) || value < 0) {
       return res.status(400).json({
-        error: "Invalid value",
-      });
+        error: "Invalid value: must be a number ≥ 0",
+        });
     }
-
+   
     const existingLedgerItems = await prisma.ledgerItem.findMany({
       where: {
         shopId,
@@ -202,3 +204,4 @@ export const post = [
     res.json({ ledgerItems, balance: balanceAfter });
   },
 ];
+
