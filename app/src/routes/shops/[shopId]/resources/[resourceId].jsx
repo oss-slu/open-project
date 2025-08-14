@@ -11,6 +11,7 @@ import {
   Input,
   Switch,
   DropdownInput,
+  Badge,
 } from "tabler-react-2";
 import { Gallery } from "../../../../components/gallery/gallery";
 import { UploadDropzone } from "../../../../components/upload/uploader";
@@ -18,7 +19,6 @@ import { Icon } from "#icon";
 const { H1, H2, H3, Text, B } = Typography;
 import "@mdxeditor/editor/style.css";
 import { MarkdownEditor } from "#markdownEditor";
-import Badge from "tabler-react-2/dist/badge";
 import { MarkdownRender } from "#markdownRender";
 import { Alert } from "#alert";
 import { Table } from "#table";

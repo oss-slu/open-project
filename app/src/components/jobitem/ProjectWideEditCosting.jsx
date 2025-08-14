@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Util, Typography, Switch, Card } from "tabler-react-2";
+import { Util, Typography, Switch, Card, Badge } from "tabler-react-2";
 import { QuantityInput, TimeInput } from "./EditCosting";
 import { Button } from "#button";
 import { ResourceTypePicker } from "../resourceTypePicker/ResourceTypePicker";
@@ -16,7 +16,6 @@ import {
 import { useParams } from "react-router-dom";
 import { Spinner } from "#spinner";
 import { Icon } from "#icon";
-import Badge from "tabler-react-2/dist/badge";
 import { Price } from "#renderPrice";
 const { H2, H3 } = Typography;
 import styles from "./jobItem.module.css";
@@ -132,11 +131,12 @@ const CostCard = ({
     localLineItem?.materialId
   );
 
-  const { loading: secondaryMaterialLoading, material: secondaryMaterial } = useMaterial(
-    shopId,
-    localLineItem?.resourceTypeId,
-    localLineItem?.secondaryMaterialId
-  );
+  const { loading: secondaryMaterialLoading, material: secondaryMaterial } =
+    useMaterial(
+      shopId,
+      localLineItem?.resourceTypeId,
+      localLineItem?.secondaryMaterialId
+    );
 
   const { loading: resourceLoading, resource } = useResource(
     shopId,
@@ -152,12 +152,18 @@ const CostCard = ({
   if (!localLineItem) return null;
 
   const calculateTotalCost = () => {
-    const { timeQty, processingTimeQty, unitQty, materialQty, secondaryMaterialQty } = localLineItem;
+    const {
+      timeQty,
+      processingTimeQty,
+      unitQty,
+      materialQty,
+      secondaryMaterialQty,
+    } = localLineItem;
     return (
       (timeQty * resource?.costPerTime || 0) +
       (processingTimeQty * resource?.costPerProcessingTime || 0) +
       (unitQty * resource?.costPerUnit || 0) +
-      (materialQty * material?.costPerUnit || 0) + 
+      (materialQty * material?.costPerUnit || 0) +
       (secondaryMaterialQty * secondaryMaterial?.costPerUnit || 0)
     );
   };
@@ -237,7 +243,10 @@ const CostCard = ({
                     value={localLineItem.secondaryMaterialId}
                     resourceTypeId={localLineItem.resourceTypeId}
                     onChange={(value) =>
-                      setLocalLineItem({ ...localLineItem, secondaryMaterialId: value })
+                      setLocalLineItem({
+                        ...localLineItem,
+                        secondaryMaterialId: value,
+                      })
                     }
                     loading={opLoading}
                     materialType={"Secondary"}
@@ -246,7 +255,9 @@ const CostCard = ({
                   <Util.Col gap={1}>
                     <span className="form-label mb-0">secondaryMaterial</span>
                     <span>
-                      <Badge soft>{localLineItem.secondaryMaterial?.title}</Badge>
+                      <Badge soft>
+                        {localLineItem.secondaryMaterial?.title}
+                      </Badge>
                     </span>
                   </Util.Col>
                 )}
@@ -278,13 +289,16 @@ const CostCard = ({
           localLineItem.materialId &&
           localLineItem.secondaryMaterialId ? (
             <>
-              {materialLoading || secondaryMaterialLoading || resourceLoading ? (
+              {materialLoading ||
+              secondaryMaterialLoading ||
+              resourceLoading ? (
                 <Spinner />
               ) : !resource || !material || !secondaryMaterial ? (
                 <span>
                   <Badge color="danger" soft>
                     <Icon i="coin-off" />
-                    Costing unavailable1 without material, secondaryMaterial and resource
+                    Costing unavailable1 without material, secondaryMaterial and
+                    resource
                   </Badge>
                 </span>
               ) : (
@@ -336,7 +350,10 @@ const CostCard = ({
                     costPerUnit={secondaryMaterial.costPerUnit || 0}
                     icon={<Icon i="weight" />}
                     onChange={(value) =>
-                      setLocalLineItem({ ...localLineItem, secondaryMaterialQty: value })
+                      setLocalLineItem({
+                        ...localLineItem,
+                        secondaryMaterialQty: value,
+                      })
                     }
                     showInput={userIsPrivileged}
                   />
@@ -355,7 +372,8 @@ const CostCard = ({
             <span>
               <Badge color="danger" soft>
                 <Icon i="coin-off" />
-                Costing unavailable2 without material, secondaryMaterial and resource
+                Costing unavailable2 without material, secondaryMaterial and
+                resource
               </Badge>
             </span>
           )}

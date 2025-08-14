@@ -7,6 +7,8 @@ import NodeStl from "node-stl";
 const logging = false;
 
 export const handleUpload = async (data) => {
+  // eslint-disable-next-line
+  // return;
   const { jobId, shopId, userId, scope, resourceId, materialId, groupId } =
     data.metadata;
 

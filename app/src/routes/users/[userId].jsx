@@ -10,9 +10,8 @@ import { LogTimeline } from "../../components/logs/timeline";
 import { Table } from "#table";
 import moment from "moment";
 import { Button } from "#button";
-import { Input } from "tabler-react-2";
+import { Input, Badge } from "tabler-react-2";
 import { Icon } from "#icon";
-import Badge from "tabler-react-2/dist/badge";
 import { useModal } from "#modal";
 import { useShops } from "../../hooks/useShops";
 import { Spinner } from "#spinner";
@@ -178,7 +177,10 @@ export const UserPage = () => {
   }, [user]);
 
   const handleSaveName = async () => {
-    if (editableFirstName !== user.firstName || editableLastName !== user.lastName) {
+    if (
+      editableFirstName !== user.firstName ||
+      editableLastName !== user.lastName
+    ) {
       try {
         await updateUserName(editableFirstName, editableLastName);
         await refetch(true);
@@ -206,8 +208,20 @@ export const UserPage = () => {
       <Util.Row gap={2} align="center">
         <Avatar size="xl" dicebear initials={user.id} />
         <Util.Col>
-          <Input value={editableFirstName} onChange={(e) => { setEditableFirstName(e); if (!isEditing) setIsEditing(true); }}></Input>
-          <Input value={editableLastName} onChange={(e) => { setEditableLastName(e); if (!isEditing) setIsEditing(true); }}></Input>
+          <Input
+            value={editableFirstName}
+            onChange={(e) => {
+              setEditableFirstName(e);
+              if (!isEditing) setIsEditing(true);
+            }}
+          ></Input>
+          <Input
+            value={editableLastName}
+            onChange={(e) => {
+              setEditableLastName(e);
+              if (!isEditing) setIsEditing(true);
+            }}
+          ></Input>
           {isEditing && (
             <div>
               <Button onClick={handleSaveName}>Save</Button>

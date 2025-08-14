@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Page } from "#page";
 import { Icon } from "#icon";
 import { Link, useParams } from "react-router-dom";
-import { Typography, Util, Input, Card } from "tabler-react-2";
+import { Typography, Util, Input, Card, Button, Badge } from "tabler-react-2";
 import { useJob } from "../../../../../hooks/useJob";
 import { Loading } from "#loading";
 import { UploadDropzone } from "../../../../../components/upload/uploader";
@@ -10,10 +10,8 @@ import {
   JobItem,
   switchStatusToUI,
 } from "../../../../../components/jobitem/JobItem";
-import { Button } from "#button";
 const { H1, H2, H3 } = Typography;
 import moment from "moment";
-import Badge from "tabler-react-2/dist/badge";
 import { NotFound } from "#notFound";
 import { LoadableDropdownInput } from "../../../../../components/loadableDropdown/LoadableDropdown";
 import { useAuth, useShop } from "#hooks";
@@ -297,6 +295,8 @@ export const JobPage = () => {
                     onUploadComplete={() => {
                       refetchJobs(false);
                     }}
+                    useNewDropzone={true}
+                    endpoint={`/api/shop/${shopId}/job/${jobId}/upload`}
                   />
                 ),
               },

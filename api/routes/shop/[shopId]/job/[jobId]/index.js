@@ -6,7 +6,7 @@ import { generateInvoice } from "../../../../../util/docgen/invoice.js";
 import { z } from "zod";
 
 const userSchema = z.object({
-  ledgerItemId: z.string().optional
+  ledgerItemId: z.string().optional,
 });
 
 /** @type {Prisma.JobInclude} */
@@ -16,6 +16,8 @@ const JOB_INCLUDE = {
       active: true,
     },
     include: {
+      file: true,
+      thumbnailFile: true,
       resource: {
         select: {
           costingPublic: true,
@@ -312,10 +314,10 @@ export const put = [
         });
 
         const validationResult = userSchema.safeParse(req.body);
-          if (!validationResult.success) {
-            return res.status(400).json({
-          error: "Invalid data",
-          issues: validationResult.error.format(),
+        if (!validationResult.success) {
+          return res.status(400).json({
+            error: "Invalid data",
+            issues: validationResult.error.format(),
           });
         }
 
@@ -327,7 +329,7 @@ export const put = [
           },
           data: {
             ledgerItemId: validatedData.ledgerItem,
-          }
+          },
         });
 
         await prisma.logs.createMany({

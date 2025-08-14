@@ -29,6 +29,27 @@ model user {
   shops            UserShop[]
   logs             logs[]
   navigation       Navigation[]
+  files            File[]
+}
+
+model File {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      user?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  key          String
+  originalname String
+  mimetype     String
+  contentType  String
+  size         Int
+  location     String
+  blurhash     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  jobItemsAsFile         JobItem[] @relation("JobItem_file")
+  jobItemsAsThumbnail    JobItem[] @relation("JobItem_thumbnailFile")
 }
 
 model logs {
@@ -313,13 +334,21 @@ model JobItem {
   title                String
   status               ProgressStatus @default(NOT_STARTED)
   qty                  Float?
-  fileKey              String
-  fileUrl              String
-  fileName             String
-  fileType             String
+
+  fileKey              String?
+  fileUrl              String?
+  fileName             String?
+  fileType             String?
   fileThumbnailKey     String?
   fileThumbnailUrl     String?
   fileThumbnailName    String?
+
+  fileId          String?
+  file            File? @relation("JobItem_file", fields: [fileId], references: [id], onDelete: Cascade)
+
+  thumbnailFileId String?
+  thumbnailFile   File? @relation("JobItem_thumbnailFile", fields: [thumbnailFileId], references: [id], onDelete: Cascade)
+
   stlVolume            Float?
   stlBoundingBoxX      Float?
   stlBoundingBoxY      Float?

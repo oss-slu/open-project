@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useModal } from "#modal";
 import { Icon } from "#icon";
-import { Util, Input } from "tabler-react-2";
+import { Util, Input, Badge } from "tabler-react-2";
 import styles from "./jobItem.module.css";
 import { Price } from "#renderPrice";
 import { Time } from "../time/RenderTime";
 import { Button } from "#button";
-import Badge from "tabler-react-2/dist/badge";
 
 export const EditCosting = ({
   item,
@@ -33,6 +32,10 @@ export const EditCosting = ({
       secondaryMaterial,
       qty,
     } = newItem;
+    if (!resource) return 0;
+    if (!material) return 0;
+    if (!secondaryMaterial) return 0;
+
     return (
       ((timeQty * resource.costPerTime || 0) +
         (processingTimeQty * resource.costPerProcessingTime || 0) +
@@ -175,10 +178,12 @@ export const EditCosting = ({
         quantity={newItem.secondaryMaterialQty}
         costPerUnit={newItem.secondaryMaterial.costPerUnit}
         icon={<Icon i="weight" />}
-        onChange={(value) => setNewItem({ ...newItem, secondaryMaterialQty: value })}
+        onChange={(value) =>
+          setNewItem({ ...newItem, secondaryMaterialQty: value })
+        }
         modal={modal}
         showInput={userIsPrivileged}
-      />      
+      />
       <Util.Row gap={1} align="center" justify="between">
         {JSON.stringify(newItem) !== JSON.stringify(item) ? (
           <Util.Row gap={1} align="center" wrap>

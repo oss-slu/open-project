@@ -16,12 +16,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.864.0",
     "@prisma/client": "5.21.0",
     "@scalenc/stl-to-png": "^1.2.0",
     "@vitest/coverage-c8": "^0.33.0",
     "@vitest/coverage-istanbul": "^2.1.5",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "cuid": "^3.0.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
@@ -32,6 +34,8 @@
     "inquirer": "^12.4.2",
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
+    "multer": "^2.0.2",
+    "multer-s3": "^3.0.1",
     "node-stl": "^0.7.3",
     "nodemon": "^3.1.7",
     "ora": "^8.2.0",
@@ -64,6 +68,7 @@
     "#gt": "./util/tests/generateToken.js",
     "#index": "./index.js",
     "#setup": "./util/tests/setup.js",
-    "#forceError": "./util/tests/forceError.js"
+    "#forceError": "./util/tests/forceError.js",
+    "#upload": "./util/file.js"
   }
 }
