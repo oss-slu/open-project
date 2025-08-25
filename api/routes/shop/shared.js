@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { Prisma } from "@prisma/client";
 
+/** @type {Prisma.ShopSelect} */
 export const SHOP_SELECT = {
   id: true,
   name: true,
@@ -12,6 +13,7 @@ export const SHOP_SELECT = {
   color: true,
   logoUrl: true,
   startingDeposit: true,
+  logoFile: true,
 };
 
 /** @type {Prisma.ShopSelect} */

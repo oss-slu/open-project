@@ -3,12 +3,11 @@ import { Page } from "#page";
 import { shopSidenavItems } from "../../../..";
 import { Link, useParams } from "react-router-dom";
 import { useAuth, useMaterial, useShop } from "#hooks";
-import { Typography, Util, Input, Card, Switch } from "tabler-react-2";
+import { Typography, Util, Input, Card, Switch, Badge } from "tabler-react-2";
 import { Loading } from "#loading";
 import { Button } from "#button";
 import { Icon } from "#icon";
 import { ResourceTypePicker } from "../../../../../../../components/resourceTypePicker/ResourceTypePicker";
-import Badge from "tabler-react-2/dist/badge";
 import { UploadDropzone } from "../../../../../../../components/upload/uploader";
 import { MarkdownEditor } from "#markdownEditor";
 import { MarkdownRender } from "#markdownRender";
@@ -119,18 +118,21 @@ export const MaterialPage = () => {
           <Util.Col gap={1} align="start">
             <Button
               ghost
-              href={material.msdsFileUrl ? material.msdsFileUrl : null}
+              href={material.msdsFileUrl || material.msdsFile?.location || null}
               target="_blank"
               disabled
               variant="primary"
+              data-material={JSON.stringify(material)}
             >
               <Icon i="download" />
               Material Safety Data Sheet
-              {material.msdsFileUrl ? "" : " (Not Available)"}
+              {material.msdsFileUrl || material.msdsFile?.location
+                ? ""
+                : " (Not Available)"}
             </Button>
             <Button
               ghost
-              href={material.tdsFileUrl ? material.tdsFileUrl : null}
+              href={material.tdsFileUrl || material.tdsFile?.location || null}
               target="_blank"
               disabled
               variant="primary"
@@ -158,7 +160,6 @@ export const MaterialPage = () => {
               </div>
             ) : user.admin || userShop.accountType === "ADMIN" ? (
               <UploadDropzone
-                scope="material.image"
                 metadata={{ shopId, materialId }}
                 onUploadComplete={refetch}
                 dropzoneAppearance={{
@@ -170,6 +171,8 @@ export const MaterialPage = () => {
                     display: "none",
                   },
                 }}
+                endpoint={`/api/shop/${shopId}/resources/type/${material.resourceTypeId}/material/${materialId}/images`}
+                useNewDropzone={true}
               />
             ) : (
               <i>No images found</i>
@@ -271,7 +274,6 @@ export const MaterialPage = () => {
               </Card>
             )}
             <UploadDropzone
-              scope="material.msds"
               metadata={{ shopId, materialId }}
               onUploadComplete={() => {
                 setTimeout(() => {
@@ -292,6 +294,8 @@ export const MaterialPage = () => {
                   backgroundColor: "var(--tblr-primary)",
                 },
               }}
+              useNewDropzone={true}
+              endpoint={`/api/shop/${shopId}/resources/type/${material.resourceTypeId}/material/${materialId}/uploadMsds`}
             />
           </Util.Row>
           <Util.Spacer size={2} />
@@ -321,7 +325,6 @@ export const MaterialPage = () => {
               </Card>
             )}
             <UploadDropzone
-              scope="material.tds"
               metadata={{ shopId, materialId }}
               onUploadComplete={refetch}
               dropzoneAppearance={{
@@ -338,6 +341,8 @@ export const MaterialPage = () => {
                   backgroundColor: "var(--tblr-primary)",
                 },
               }}
+              useNewDropzone={true}
+              endpoint={`/api/shop/${shopId}/resources/type/${material.resourceTypeId}/material/${materialId}/uploadTds`}
             />
           </Util.Row>
           <Util.Spacer size={2} />
@@ -419,7 +424,6 @@ export const MaterialPage = () => {
           <Util.Spacer size={1} />
           <H3>Upload a new image</H3>
           <UploadDropzone
-            scope="material.image"
             metadata={{ shopId, materialId }}
             dropzoneAppearance={{
               container: {
@@ -434,6 +438,8 @@ export const MaterialPage = () => {
               },
             }}
             onUploadComplete={refetch}
+            endpoint={`/api/shop/${shopId}/resources/type/${material.resourceTypeId}/material/${materialId}/images`}
+            useNewDropzone={true}
           />
         </div>
       ) : (

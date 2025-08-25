@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Timeline } from "tabler-react-2/dist/timeline";
+import { Timeline, Badge } from "tabler-react-2";
 import { Icon } from "#icon";
 import moment from "moment";
-import Badge from "tabler-react-2/dist/badge";
 import { Util } from "tabler-react-2";
 import { Link } from "react-router-dom";
 import { ObjectDiffViewer } from "../objectDiffViewer/ObjectDiffViewer";

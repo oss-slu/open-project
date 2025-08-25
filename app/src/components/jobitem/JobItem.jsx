@@ -1,17 +1,23 @@
 import React, { useState } from "react";
-import { Card, Util, Typography, DropdownInput, Input } from "tabler-react-2";
+import {
+  Card,
+  Util,
+  Typography,
+  DropdownInput,
+  Input,
+  Badge,
+  Button,
+  useModal,
+  Spinner,
+} from "tabler-react-2";
 import { RenderMedia } from "../media/renderMedia";
-import { Button } from "#button";
 import { Icon } from "#icon";
-import { useModal } from "#modal";
 import { useJobItem } from "../../hooks/useJobItem";
 import { Link, useParams } from "react-router-dom";
-import { Spinner } from "#spinner";
 const { H3, H4 } = Typography;
 import styles from "./jobItem.module.css";
 import { LoadableDropdownInput } from "#loadableDropdown";
 import { ResourceTypePicker } from "../resourceTypePicker/ResourceTypePicker";
-import Badge from "tabler-react-2/dist/badge";
 import { MaterialPicker } from "../materialPicker/MaterialPicker";
 import { ResourcePicker } from "../resourcePicker/ResourcePicker";
 
@@ -103,7 +109,7 @@ export const JobItem = ({
           <RenderMedia
             mediaUrl={item.fileUrl}
             fileType={item.fileType}
-            thumbnailUrl={item.fileThumbnailUrl}
+            thumbnailUrl={item.thumbnailFile?.location || item.fileThumbnailUrl}
           />
           <Util.Row gap={2} align="start" threshold={1200} style={{ flex: 1 }}>
             <div style={{ maxWidth: 280 }}>
@@ -367,7 +373,9 @@ export const JobItem = ({
               title: "Costing",
               content: (
                 <>
-                  {item.materialId && item.resourceId && item.secondaryMaterialId ? (
+                  {item.materialId &&
+                  item.resourceId &&
+                  item.secondaryMaterialId ? (
                     <EditCosting
                       item={item}
                       onChange={(value) => updateJobItem(value)}
@@ -377,7 +385,8 @@ export const JobItem = ({
                   ) : (
                     <Badge color="red" soft>
                       <Icon i="coin-off" />
-                      Costing unavailable without material, secondaryMaterial and resource
+                      Costing unavailable without material, secondaryMaterial
+                      and resource
                     </Badge>
                   )}
                 </>

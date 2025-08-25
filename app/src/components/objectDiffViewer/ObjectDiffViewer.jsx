@@ -1,6 +1,6 @@
 import React from "react";
 import { Util } from "tabler-react-2";
-import Badge from "tabler-react-2/dist/badge";
+import { Badge } from "tabler-react-2";
 import { Icon } from "#icon";
 import style from "./ObjectDiffViewer.module.css";
 

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { RenderMedia } from "../media/renderMedia";
-import { Card, Typography, Util, Input } from "tabler-react-2";
+import { Card, Typography, Util, Input, Badge } from "tabler-react-2";
 import { downloadFile, switchStatusToUI } from "./JobItem";
-import Badge from "tabler-react-2/dist/badge";
 import { Icon } from "#icon";
 import { Button } from "#button";
 import { useJobItem } from "#hooks";

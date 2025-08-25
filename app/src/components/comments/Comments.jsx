@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useComments } from "#useComments";
-import { Card, Util, Input, Typography } from "tabler-react-2";
+import { Card, Util, Input, Typography, Badge } from "tabler-react-2";
 import { Loading } from "#loading";
 import { Button } from "#button";
 import { Avatar } from "#avatar";
 import moment from "moment";
-import Badge from "tabler-react-2/dist/badge";
 import { useAuth } from "#hooks";
 const { H4 } = Typography;
 

@@ -1,8 +1,7 @@
 import React from "react";
 import { Page, sidenavItems } from "#page";
 import { useAuth } from "#useAuth";
-import { Typography, Util } from "tabler-react-2";
-import Badge from "tabler-react-2/dist/badge";
+import { Typography, Util, Badge } from "tabler-react-2";
 import { useModal } from "#modal";
 import { Table } from "#table";
 import { useUsers } from "../../hooks/useUsers";

@@ -3,6 +3,7 @@ import { generateUploadDropzone } from "@uploadthing/react";
 import { u } from "#url";
 import "@uploadthing/react/styles.css";
 import toast from "react-hot-toast";
+import { Dropzone } from "../Dropzone/Dropzone";
 
 const _UploadDropzone = generateUploadDropzone({
   url: u("/api/files/upload"),
@@ -13,8 +14,14 @@ export const UploadDropzone = ({
   metadata,
   onUploadComplete,
   dropzoneAppearance,
+  useNewDropzone = false,
+  endpoint,
 }) => {
-  return (
+  return useNewDropzone ? (
+    <>
+      <Dropzone onSuccessfulUpload={onUploadComplete} endpoint={endpoint} />
+    </>
+  ) : (
     <>
       <_UploadDropzone
         appearance={dropzoneAppearance}

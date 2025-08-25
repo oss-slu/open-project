@@ -137,8 +137,6 @@ export const put = [
       });
     }
 
-    const validatedData = validationResult.data;
-
     const updatedItem = await prisma.jobItem.update({
       where: {
         id: jobItemId,
@@ -148,16 +146,18 @@ export const put = [
       include: {
         resource: {
           select: {
-            costingPublic: validatedData.costingPublic,
-            costPerProcessingTime: validatedData.costingPerProcessingTime,
-            costPerTime: validatedData.costPerTime,
-            costPerUnit: validatedData.costPerUnit,
+            id: true,
+            title: true,
+            costingPublic: true,
+            costPerProcessingTime: true,
+            costPerTime: true,
+            costPerUnit: true,
           },
         },
         material: {
           select: {
-            costPerUnit: validatedData.costPerUnit,
-            unitDescriptor: validatedData.unitDescriptor,
+            costPerUnit: true,
+            unitDescriptor: true,
           },
         },
         secondaryMaterial: {

@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE "ResourceImage" ADD COLUMN     "fileId" TEXT,
+ALTER COLUMN "fileKey" DROP NOT NULL,
+ALTER COLUMN "fileUrl" DROP NOT NULL,
+ALTER COLUMN "fileName" DROP NOT NULL,
+ALTER COLUMN "fileType" DROP NOT NULL;
+
+-- AddForeignKey
+ALTER TABLE "ResourceImage" ADD CONSTRAINT "ResourceImage_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File"("id") ON DELETE CASCADE ON UPDATE CASCADE;

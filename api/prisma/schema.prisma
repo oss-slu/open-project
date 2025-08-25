@@ -29,6 +29,36 @@ model user {
   shops            UserShop[]
   logs             logs[]
   navigation       Navigation[]
+  files            File[]
+}
+
+model File {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      user?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  key          String
+  originalname String
+  mimetype     String
+  contentType  String
+  size         Int
+  location     String
+  blurhash     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  jobItemsAsFile         JobItem[] @relation("JobItem_file")
+  jobItemsAsThumbnail    JobItem[] @relation("JobItem_thumbnailFile")
+
+  resourceImagesAsFile   ResourceImage[] @relation("ResourceImage_file")
+
+  materialMsdsFile Material[] @relation("Material_msdsFile")
+  materialTdsFile Material[] @relation("Material_tdsFile")
+
+  materialImageAsFile MaterialImage[] @relation("MaterialImage_file")
+
+  logoFileAsFile Shop[] @relation("Shop_logoFile")
 }
 
 model logs {
@@ -92,9 +122,14 @@ model Shop {
   website         String?
   description     String?
   imageUrl        String?
+
   logoUrl         String?
   logoKey         String?
   logoName        String?
+
+  logoFileId      String?
+  logoFile        File?          @relation("Shop_logoFile", fields: [logoFileId], references: [id], onDelete: Cascade)
+
   color           Color?
   startingDeposit Float?
   active          Boolean        @default(true)
@@ -154,14 +189,23 @@ model Material {
   unitDescriptor               String?
   costPublic                   Boolean                  @default(true)
   resourceTypeId               String
+
   msdsFileKey                  String?
   msdsFileUrl                  String?
   msdsFileName                 String?
   msdsFileType                 String?
+
+  msdsFileId                   String?
+  msdsFile                     File?                    @relation("Material_msdsFile", fields: [msdsFileId], references: [id], onDelete: Cascade)
+
   tdsFileKey                   String?
   tdsFileUrl                   String?
   tdsFileName                  String?
   tdsFileType                  String?
+
+  tdsFileId                    String?
+  tdsFile                      File?                    @relation("Material_tdsFile", fields: [tdsFileId], references: [id], onDelete: Cascade)
+
   additionalCostItems          AdditionalCostLineItem[] @relation("AdditionalCostLineItem::primaryMaterial")
   additionalCostItemsSecondary AdditionalCostLineItem[] @relation("AdditionalCostLineItem::secondaryMaterial")
   jobs                         Job[]                    @relation("Job::primaryMaterial")
@@ -176,10 +220,15 @@ model Material {
 
 model MaterialImage {
   id          String   @id @default(cuid())
-  fileKey     String
-  fileUrl     String
-  fileName    String
-  fileType    String
+
+  fileKey     String?
+  fileUrl     String?
+  fileName    String?
+  fileType    String?
+
+  fileId      String?
+  file        File?    @relation("MaterialImage_file", fields: [fileId], references: [id], onDelete: Cascade)
+
   description String?
   active      Boolean  @default(true)
   materialId  String
@@ -191,11 +240,15 @@ model MaterialImage {
 
 model ResourceImage {
   id          String   @id @default(cuid())
-  fileKey     String
-  fileUrl     String
-  fileName    String
-  fileType    String
+  fileKey     String?
+  fileUrl     String?
+  fileName    String?
+  fileType    String?
   description String?
+
+  fileId      String?
+  file        File?    @relation("ResourceImage_file", fields: [fileId], references: [id], onDelete: Cascade)
+
   active      Boolean  @default(true)
   resourceId  String
   createdAt   DateTime @default(now())
@@ -313,13 +366,22 @@ model JobItem {
   title                String
   status               ProgressStatus @default(NOT_STARTED)
   qty                  Float?
-  fileKey              String
-  fileUrl              String
-  fileName             String
-  fileType             String
-  fileThumbnailKey     String?
-  fileThumbnailUrl     String?
-  fileThumbnailName    String?
+
+  // fileKey              String?
+  // fileUrl              String?
+  // fileName             String?
+  // fileType             String?
+  // fileThumbnailKey     String?
+  // fileThumbnailUrl     String?
+  // fileThumbnailName    String?
+
+  fileId          String?
+  file            File? @relation("JobItem_file", fields: [fileId], references: [id], onDelete: Cascade)
+
+  fileThumbnailId String? @map("thumbnailFileId")
+  fileThumbnail   File?   @relation("JobItem_thumbnailFile", fields: [fileThumbnailId], references: [id], onDelete: Cascade)
+
+
   stlVolume            Float?
   stlBoundingBoxX      Float?
   stlBoundingBoxY      Float?

@@ -67,7 +67,7 @@ export const del = [
       },
     });
 
-    await utapi.deleteFiles(image.fileKey);
+    // await utapi.deleteFiles(image.fileKey);
 
     return res.json({ message: "Image deleted" });
   },

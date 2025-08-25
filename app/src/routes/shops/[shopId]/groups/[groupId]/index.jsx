@@ -10,13 +10,12 @@ import { shopSidenavItems } from "../..";
 import { Page } from "#page";
 import { Loading } from "#loading";
 import { Button } from "#button";
-import { Util, Alert, DropdownInput } from "tabler-react-2";
+import { Util, Alert, DropdownInput, Badge } from "tabler-react-2";
 import { useModal } from "#modal";
 import { CreateBillingGroupInvitation } from "../../../../../components/billingGroup/CreateBillingGroupInvitation";
 import { Table } from "#table";
 import moment from "moment";
 import { MOMENT_FORMAT } from "#constants";
-import Badge from "tabler-react-2/dist/badge";
 import { EditBillingGroup } from "../../../../../components/billingGroup/EditBillingGroup";
 import { switchStatusForBadge } from "../../jobs";
 import { EditBillingGroupInvitation } from "../../../../../components/editBillingGroupInvitation/EditBillingGroupInvitation";
@@ -351,7 +350,7 @@ export const BillingGroupPage = () => {
           />
           <Util.Spacer size={2} />
           <h2>Jobs</h2>
-          {billingGroup.jobs.length === 0 ? (
+          {billingGroup.jobs?.length === 0 ? (
             <i>
               There are no jobs in this billing group. You can add jobs by
               clicking the "Edit" button above and turning on job connections.

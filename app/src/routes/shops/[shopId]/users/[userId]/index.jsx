@@ -4,10 +4,9 @@ import { Link, useParams } from "react-router-dom";
 import { shopSidenavItems } from "../..";
 import { Page } from "#page";
 import { Loading } from "#loading";
-import { Typography, Util, Input, DropdownInput } from "tabler-react-2";
+import { Typography, Util, Input, DropdownInput, Badge } from "tabler-react-2";
 import { Avatar } from "#avatar";
 import { Icon } from "#icon";
-import Badge from "tabler-react-2/dist/badge";
 import { Table } from "#table";
 import moment from "moment";
 import { switchStatusToUI } from "../../../../../components/jobitem/JobItem";
@@ -55,11 +54,16 @@ const AddBalanceModalContent = ({ postLedgerItem, opLoading }) => {
 
       {type && type.startsWith("AUTOMATED") && (
         <div>
-          <p><i>Automated top-ups and deposits will be processed on a regular schedule.</i></p>
           <p>
-            {type === "AUTOMATED_TOPUP" ? 
-              "The automated top-up will be applied to bring the user's balance to the specified amount." : 
-              "The automated deposit will add a fixed amount to the user's balance periodically."}
+            <i>
+              Automated top-ups and deposits will be processed on a regular
+              schedule.
+            </i>
+          </p>
+          <p>
+            {type === "AUTOMATED_TOPUP"
+              ? "The automated top-up will be applied to bring the user's balance to the specified amount."
+              : "The automated deposit will add a fixed amount to the user's balance periodically."}
           </p>
         </div>
       )}

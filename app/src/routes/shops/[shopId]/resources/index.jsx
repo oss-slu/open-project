@@ -128,9 +128,9 @@ const ResourceType = ({ resourceType, shopId, admin, onDelete }) => {
   });
 
   const { useEditResourceTypeModal } = useResourceTypes(shopId);
-  const { 
-    editModal: editResourceType, 
-    editModalElement: EditResourceTypeModalElement
+  const {
+    editModal: editResourceType,
+    editModalElement: EditResourceTypeModalElement,
   } = useEditResourceTypeModal(resourceType.id, resourceType.title);
 
   return (
@@ -143,7 +143,7 @@ const ResourceType = ({ resourceType, shopId, admin, onDelete }) => {
         <H2 id={resourceType.id}>{resourceType.title}</H2>
         {admin && (
           <Util.Row gap={1}>
-            <Button onClick={editResourceType}> 
+            <Button onClick={editResourceType}>
               <Icon i="tools" /> Edit Resource Type
             </Button>
             {EditResourceTypeModalElement}
@@ -222,7 +222,9 @@ const ResourceCard = ({ resource, shopId }) => {
       <Card key={resource.id} title={resource.title} style={{ width: 300 }}>
         {resource.images[0] ? (
           <img
-            src={resource.images[0].fileUrl}
+            src={
+              resource.images[0].fileUrl || resource.images[0].file?.location
+            }
             style={{ width: "100%", height: 200, objectFit: "cover" }}
           />
         ) : (

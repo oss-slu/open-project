@@ -6,12 +6,13 @@ import classNames from "classnames";
 export const RenderMedia = ({
   mediaUrl,
   thumbnailUrl,
-  fileType,
+  fileType: originalFileType,
   big = false,
   small = false,
 }) => {
   const [preview, setPreview] = useState(true);
   const timeoutRef = useRef(null);
+  const fileType = originalFileType?.toLowerCase();
 
   const handleMouseOut = () => {
     timeoutRef.current = setTimeout(() => {

@@ -23,3 +23,20 @@ export const authFetch = async (url, options) => {
   }
   return res;
 };
+
+export const authFetchWithoutContentType = async (url, options) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(u(url), {
+    ...options,
+    headers: {
+      ...options?.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (res.status === 401) {
+    localStorage.removeItem("token");
+    window.logout && window.logout();
+    emitter.emit("logout");
+  }
+  return res;
+};

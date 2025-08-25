@@ -107,7 +107,14 @@ export const shopSidenavItems = (
 export const ShopPage = () => {
   const { user, loading } = useAuth();
   const { shopId } = useParams();
-  const { shop, userShop, updateShop, opLoading, deleteShop, deleteModalElement} = useShop(shopId);
+  const {
+    shop,
+    userShop,
+    updateShop,
+    opLoading,
+    deleteShop,
+    deleteModalElement,
+  } = useShop(shopId);
   const [editing, setEditing] = useState(false);
   const [newShop, setNewShop] = useState(shop);
   useEffect(() => {
@@ -145,15 +152,15 @@ export const ShopPage = () => {
         <H1>{shop.name}</H1>
         {user.admin || userShop.accountType === "ADMIN"
           ? !editing && (
-            <Util.Row justify="end">
-              <Button onClick={() => setEditing(true)}>
-                <Icon i="pencil" /> Edit Shop
-              </Button>
+              <Util.Row justify="end">
+                <Button onClick={() => setEditing(true)}>
+                  <Icon i="pencil" /> Edit Shop
+                </Button>
 
-              <Button onClick={() => deleteShop()}>
-                <Icon i="trash" /> Delete Shop
-              </Button>
-            </Util.Row>
+                <Button onClick={() => deleteShop()}>
+                  <Icon i="trash" /> Delete Shop
+                </Button>
+              </Util.Row>
             )
           : null}
         {deleteModalElement}
@@ -177,11 +184,12 @@ export const ShopPage = () => {
             <div>
               <label className="form-label">Logo</label>
               <UploadDropzone
-                scope="shop.logo"
                 metadata={{
                   shopId: shopId,
                 }}
                 onUploadComplete={() => document.location.reload()}
+                endpoint={`/api/shop/${shopId}/logo`}
+                useNewDropzone={true}
               />
             </div>
             <Input

@@ -5,7 +5,7 @@ import { z } from "zod";
 
 const resourceSchema = z.object({
   title: z.string().min(1, "Resouce must have title"),
-  shopId: z.string().min(1, "Shop must have ID")
+  shopId: z.string().min(1, "Shop must have ID"),
 });
 
 export const get = [
@@ -41,6 +41,9 @@ export const get = [
             images: {
               where: {
                 active: true,
+              },
+              include: {
+                file: true,
               },
             },
           },
@@ -82,12 +85,12 @@ export const post = [
     }
 
     const validationResult = resourceSchema.safeParse(req.body);
-      if (!validationResult.success) {
-        return res.status(400).json({
-          error: "Invalid data",
-          issues: validationResult.error.format(),
-        });
-      }
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid data",
+        issues: validationResult.error.format(),
+      });
+    }
 
     const validatedData = validationResult.data;
 
@@ -146,7 +149,7 @@ export const put = [
     const resourceType = await prisma.resourceType.update({
       where: {
         id,
-      }, 
+      },
       data: {
         title,
       },

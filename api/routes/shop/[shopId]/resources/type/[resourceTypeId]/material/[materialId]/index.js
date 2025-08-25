@@ -30,9 +30,14 @@ export const get = [
         },
         include: {
           resourceType: true,
+          tdsFile: true,
+          msdsFile: true,
           images: {
             where: {
               active: true,
+            },
+            include: {
+              file: true,
             },
           },
         },

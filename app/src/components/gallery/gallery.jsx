@@ -37,8 +37,8 @@ export const Gallery = ({ images, lastSlide }) => (
         >
           <img
             className="d-block w-100"
-            src={image.fileUrl}
-            alt={image.fileName}
+            src={image.fileUrl || image.file?.location}
+            alt={image.fileName || image.file?.name}
             style={{
               height: "100%",
               objectFit: "contain",

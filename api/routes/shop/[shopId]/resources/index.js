@@ -56,6 +56,9 @@ export const get = [
               where: {
                 active: true,
               },
+              include: {
+                file: true,
+              },
             },
           },
         });
@@ -69,6 +72,9 @@ export const get = [
             images: {
               where: {
                 active: true,
+              },
+              include: {
+                file: true,
               },
             },
           },
@@ -156,7 +162,7 @@ export const post = [
           title: validatedData.title,
           shopId,
           resourceTypeId,
-        }
+        },
       });
 
       await prisma.logs.create({

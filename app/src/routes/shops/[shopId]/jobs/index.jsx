@@ -4,17 +4,15 @@ import { Page } from "#page";
 import { useShop } from "../../../../hooks/useShop";
 import { shopSidenavItems } from "../../[shopId]/index";
 import { useAuth } from "#useAuth";
-import { Typography, Util, Input } from "tabler-react-2";
+import { Typography, Util, Input, Badge, Avatar } from "tabler-react-2";
 const { H1, H3, H4 } = Typography;
 import { useJobs } from "../../../../hooks/useJobs";
 import { Button } from "#button";
 import { Table } from "#table";
-import Badge from "tabler-react-2/dist/badge";
 import moment from "moment";
 import { Loading } from "#loading";
 import { PieProgressChart } from "../../../../components/piechart/PieProgressChart";
 import { Icon } from "#icon";
-import { Avatar } from "#avatar";
 import { ShopUserPicker } from "#shopUserPicker";
 import { Price } from "#renderPrice";
 
